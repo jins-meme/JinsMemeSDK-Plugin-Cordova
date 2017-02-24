@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.jins_jp.meme.plugin" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>JINS MEME Plugin</name>
+    <description>JINS MEME SDK Plugin</description>
+    <license></license>
+    <keywords>monaca,cordova,JINS MEME</keywords>
+    <engines>
+        <engine name="cordova" version=">=6.2.0" />
+    </engines>
+    <js-module name="JinsMemePlugin" src="www/jins_meme_plugin.js">
+        <clobbers target="cordova.plugins.JinsMemePlugin" />
+    </js-module>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="JinsMemePlugin">
+                <param name="android-package" value="com.jins_jp.meme.plugin.JinsMemePlugin" />
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.BLUETOOTH" />
+            <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        </config-file>
+        <source-file src="src/android/JinsMemePlugin.java" target-dir="src/com/jins_jp/meme/plugin" />
+        <source-file src="src/android/Message.java" target-dir="src/com/jins_jp/meme/plugin" />
+        <lib-file src="src/android/MemeLib.jar" />
+        <framework src="com.google.code.gson:gson:2.3" />
+        <hook type="after_plugin_install" src="hooks/android_after_plugin_install.js" />
+        <hook type="before_plugin_uninstall" src="hooks/android_before_plugin_uninstall.js" />
+    </platform>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="JinsMemePlugin">
+                <param name="ios-package" value="JinsMemePlugin" />
+            </feature>
+        </config-file>
+        <config-file target="*-Info.plist" parent="UIBackgroundModes">
+            <array>
+                <string>bluetooth-central</string>
+                <string>bluetooth-peripheral</string>
+            </array>
+        </config-file>
+        <source-file src="src/ios/JinsMemePlugin.m" />
+        <header-file src="src/ios/JinsMemeMessage.h" />
+        <source-file src="src/ios/JinsMemeMessage.m" />
+        <framework src="src/ios/MEMELib.framework" custom="true" embed="true" />
+        <framework src="CoreBluetooth.framework" />
+        <hook type="after_plugin_install" src="hooks/ios_after_plugin_install.js" />
+    </platform>
+</plugin>
