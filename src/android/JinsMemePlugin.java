@@ -92,7 +92,7 @@ public class JinsMemePlugin extends CordovaPlugin {
             mConnectionHandler.connect(mMemeLib, args.getString(0), callbackContext);
             return true;
         } else if (action.equals("isConnected")) {
-            callbackContext.success(Message.covertToInt(mMemeLib.isConnected()));
+            callbackContext.success(Message.convertToInt(mMemeLib.isConnected()));
             return true;
         } else if (action.equals("disconnect")) {
             mConnectionHandler.disconnect(mMemeLib);
@@ -106,7 +106,7 @@ public class JinsMemePlugin extends CordovaPlugin {
             callbackContext.success(mMemeLib.getSDKVersion());
             return true;
         } else if (action.equals("isDataReceiving")) {
-            callbackContext.success(Message.covertToInt(mMemeLib.isDataReceiving()));
+            callbackContext.success(Message.convertToInt(mMemeLib.isDataReceiving()));
             return true;
         }
 
@@ -321,7 +321,7 @@ public class JinsMemePlugin extends CordovaPlugin {
                     public void run() {
                         if (mIsRunning && isAvailable(mDataReportCallback)) {
                             try {
-                                PluginResult result = new PluginResult(PluginResult.Status.OK, Message.covertToJSONObject(memeRealtimeData));
+                                PluginResult result = new PluginResult(PluginResult.Status.OK, Message.convertToJSONObject(memeRealtimeData));
                                 result.setKeepCallback(true);
                                 mDataReportCallback.sendPluginResult(result);
                             } catch (JSONException e) {
