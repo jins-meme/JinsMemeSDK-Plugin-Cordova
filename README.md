@@ -1,9 +1,9 @@
 # JINS MEME SDK Cordova Plugin
 
-## プラグイン構造
+## Plug-in structure · プラグイン構造
 
 ```
-├── README.md                              # 本文書
+├── README.md                              # This document · 本文書
 ├── hooks
 │   ├── android_after_plugin_install.js    # インストール時フックスクリプト(Android)
 │   ├── android_before_plugin_uninstall.js # アンインストール時フックスクリプト(Android)
@@ -22,17 +22,16 @@
 │       ├── JinsMemePlugin.m
 │       └── MEMELib.framework
 └── www
-    └── jins_meme_plugin.js                # JavaScriptインタフェース
-
+    └── jins_meme_plugin.js                # Cordova interface · JavaScriptインタフェース
 ```
 
 ## JavaScript API
 
-### エラーオブジェクト
+### Error codes · エラーオブジェクト
 
-#### 構造
+#### Error structure · 構造
 
-* JSONオブジェクトでエラーcodeとmessageを返す
+* Example · JSONオブジェクトでエラーcodeとmessageを返す
 
 ```
     {
@@ -41,15 +40,15 @@
     }
 ```
 
-#### エラーコード
+#### Error codes · エラーコード
 
-* プラグイン独自
+* Connection status · プラグイン独自
 
 ```
-初期化失敗　: -100
-未初期化　　: -101
-スキャン中　: -102
-未接続　　　: -103
+Initialization failure: -100  · 初期化失敗
+Uninitialized         : -101  · 未初期化
+Scanning in progress  : -102  · スキャン中
+Disconnected          : -103  · 未接続 
 ```
 
 * MemeStatus
@@ -77,7 +76,7 @@ CALIB_NOT_FINISHED : 0
 CALIB_BODY_FINISHED: 1
 CALIB_EYE_FINISHED : 2
 CALIB_BOTH_FINISHED: 3
-その他(UNKNOWN)     : -1
+UNKNOWN            : -1  # その他
 ```
 
 ### Reported Data
@@ -112,27 +111,27 @@ CALIB_BOTH_FINISHED: 3
 
 * JINS MEME SDK Android 1.1.4
 
-### アプリ設定
+### Application settings · アプリ設定
 
-* 設定 => Apps => 「該当アプリ」でBluetoothをONにすること
+* Configuration · 設定 => Apps => Turn on Bluetooth · 「該当アプリ」でBluetoothをONにすること
 
-### 依存するライブラリ等
+### Dependencies · 依存するライブラリ等
 
-* AndroidプラグインではAndroidManifest.xmlのtargetSdkVersionを変更するために以下のスクリプトを使用している
+* The plugin uses the following script to change the targetSdkVersion of AndroidManifest.xml · AndroidプラグインではAndroidManifest.xmlのtargetSdkVersionを変更するために以下のスクリプトを使用している
 
 #### android_after_plugin_install.js
 
-* cordovaのフックスクリプト
-* AndroidManifest.xmlのandroid:targetSdkVersionを22に変更
-	* BluetoothのPermission問題を解決するため
-	* 23以上だとエラーが発生
-		* ACCESS_COARSE_LOCATIONとACCESS_FINE_LOCATIONを記述していても、エラーとなってしまう
-		* gradleのバージョンを上げれば23以上でも対応可能だが、Cordovaコマンドからの更新は難しい
-	* 元々のtargetSdkVersionをhooks/original_versionファイルに保存
+* Cordova hook script · cordovaのフックスクリプト
+* Change android: targetSdkVersion in AndroidManifest.xml to 22 · AndroidManifest.xmlのandroid:targetSdkVersionを22に変更
+	* Solves Bluetooth permission problem · BluetoothのPermission問題を解決するため
+	* Version 23 and above cause an error · 23以上だとエラーが発生
+		* Occurs even if ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION are listed as permissions · ACCESS_COARSE_LOCATIONとACCESS_FINE_LOCATIONを記述していても、エラーとなってしまう
+		* Upgrading Gradle permits 23 and up, but updating from Cordova cli is difficult · gradleのバージョンを上げれば23以上でも対応可能だが、Cordovaコマンドからの更新は難しい
+	* Save original targetSdkVersion in hooks / original_version file · 元々のtargetSdkVersionをhooks/original_versionファイルに保存
 
 #### android_before_plugin_uninstall.js
 
-* JINS MEMEプラグインを取り除く際に、ANdroidManifest.xmlのandroid:targetSdkVersionを元に戻す
+* When removing the JINS MEME plug-in, undo android: targetSdkVersion in AndroidManifest.xml · JINS MEMEプラグインを取り除く際に、AndroidManifest.xmlのandroid:targetSdkVersionを元に戻す
 
 ## iOS
 
@@ -140,14 +139,14 @@ CALIB_BOTH_FINISHED: 3
 
 * JINS MEME SDK iOS 1.1.2
 
-### 依存するnodejsモジュール
+### Node.js modules · 依存するnodejsモジュール
 
-iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加するためにnode-xcodeを使用している。node-xcodeとその依存ライブラリは基本的にMIT LicenseとUnlicenseで使用可能である。各種詳細と依存関係は以下の通り。
+The iOS plugin uses node-xcode to add MEMELib.framework to Xcode's Embedded Binaries. Basically, node xcode and its dependency library can be used with MIT License and Unlicense. Various details and dependencies are as follows: · iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加するためにnode-xcodeを使用している。node-xcodeとその依存ライブラリは基本的にMIT LicenseとUnlicenseで使用可能である。各種詳細と依存関係は以下の通り。
 
 #### [node-xcode](https://github.com/kurtisf/node-xcode)
 
 * MIT License
-* 依存関係
+* Dependency · 依存関係
 
 ```
 ├─ node-uuid                # Dual License under MIT and GPL
@@ -168,13 +167,13 @@ iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加�
 
 * node-xcodeで使用
 * Dual licensed under the [MIT](http://en.wikipedia.org/wiki/MIT_License) and [GPL](http://en.wikipedia.org/wiki/GNU_General_Public_License) licenses.
-* 依存関係なし
+* No dependency · 依存関係なし
 
 #### [pegjs](http://pegjs.org/)
 
 * node-xcodeで使用
 * MIT License
-* 依存関係なし
+* No dependency · 依存関係なし
 
 #### [simple-plist](https://github.com/wollardj/node-simple-plist)
 
@@ -196,13 +195,13 @@ iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加�
 
 * bplist-creatorで使用
 * [UNLICENSE](http://unlicense.org/)
-* 依存関係なし
+* No dependency · 依存関係なし
 
 #### [bplist-creator](https://github.com/joeferner/node-bplist-parser)
 
 * simple-plistで使用
 * MIT License
-* 依存関係なし
+* No dependency · 依存関係なし
 
 #### [plist](https://github.com/TooTallNate/plist.js)
 
@@ -217,13 +216,13 @@ iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加�
 
 * plistで使用
 * MIT License
-* 依存関係なし
+* No dependency · 依存関係なし
 
 #### [util-deprecate](https://github.com/TooTallNate/util-deprecate)
 
 * plistで使用
 * MIT License
-* 依存関係なし
+* No dependency · 依存関係なし
 
 #### [xmlbuilder](http://github.com/oozcitak/xmlbuilder-js)
 
@@ -236,21 +235,21 @@ iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加�
 
 * xmlbuilderで使用
 * MIT License
-* 依存関係なし
+* No dependency · 依存関係なし
 
 #### [xmldom](https://github.com/jindw/xmldom)
 
 * plistで使用
 * MIT License
-* 依存関係なし
+* No dependency · 依存関係なし
 
-### その他流用ライブラリ
+### Other notes & instructions · その他流用ライブラリ
 
-iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加するために以下のコードを使用している。
+In the iOS plugin, the following code is used to add MEMELib.framework to Xcode's Embedded Binaries. · iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加するために以下のコードを使用している。
 
 #### ios_after_plugin_install.js
 
-* cordovaのフックスクリプト
-* hooks/after_plugin_install.js は以下のコードから流用
+* Cordova hook script · cordovaのフックスクリプト
+* hooks/after_plugin_install.js from: · は以下のコードから流用
 	* https://github.com/btafel/cordova-plugin-braintree の hooks/after_plugin_install.js
 	* MIT License
