@@ -64,24 +64,24 @@ MEME_DEVICE_INVALID  : 5  # iOS (MEME_ERROR_LOGICALと同じ意味)
 MEME_CMD_INVALID     : 6
 MEME_ERROR_FW_CHECK  : 7
 MEME_ERROR_BL_OFF    : 8
-その他(UNKNOWN)       : -1
+その他(UNKNOWN)       :-1
 ```
 
 ### CalibStatus
 
-* isCalibStatusで取得した値を以下の数値に変換して返す
+* isCalibStatus returns the following codes: · isCalibStatusで取得した値を以下の数値に変換して返す
 
 ```
 CALIB_NOT_FINISHED : 0
 CALIB_BODY_FINISHED: 1
 CALIB_EYE_FINISHED : 2
 CALIB_BOTH_FINISHED: 3
-UNKNOWN            : -1  # その他
+UNKNOWN            :-1  # その他
 ```
 
 ### Reported Data
 
-* JSONオブジェクトでデータを返す
+* JSON object returned from startDataReport · JSONオブジェクトでデータを返す
 
 ```
 {
@@ -104,7 +104,6 @@ UNKNOWN            : -1  # その他
 }
 ```
 
-
 ## Android
 
 ### SDK
@@ -113,7 +112,9 @@ UNKNOWN            : -1  # その他
 
 ### Application settings · アプリ設定
 
-* Configuration · 設定 => Apps => Turn on Bluetooth · 「該当アプリ」でBluetoothをONにすること
+Make sure that Bluetooth is enabled
+
+* Settings · 設定 => Apps => Turn on Bluetooth · 「該当アプリ」でBluetoothをONにすること
 
 ### Dependencies · 依存するライブラリ等
 
@@ -167,13 +168,13 @@ The iOS plugin uses node-xcode to add MEMELib.framework to Xcode's Embedded Bina
 
 * node-xcodeで使用
 * Dual licensed under the [MIT](http://en.wikipedia.org/wiki/MIT_License) and [GPL](http://en.wikipedia.org/wiki/GNU_General_Public_License) licenses.
-* No dependency · 依存関係なし
+* No dependencies · 依存関係なし
 
 #### [pegjs](http://pegjs.org/)
 
 * node-xcodeで使用
 * MIT License
-* No dependency · 依存関係なし
+* No dependencies · 依存関係なし
 
 #### [simple-plist](https://github.com/wollardj/node-simple-plist)
 
@@ -188,20 +189,20 @@ The iOS plugin uses node-xcode to add MEMELib.framework to Xcode's Embedded Bina
 
 * simple-plistで使用
 * MIT License
-* 依存関係
+* Dependencies: · 依存関係
 	* stream-buffers
 
 #### [stream-parser](https://github.com/samcday/node-stream-buffer)
 
 * bplist-creatorで使用
 * [UNLICENSE](http://unlicense.org/)
-* No dependency · 依存関係なし
+* No dependencies · 依存関係なし
 
 #### [bplist-creator](https://github.com/joeferner/node-bplist-parser)
 
 * simple-plistで使用
 * MIT License
-* No dependency · 依存関係なし
+* No dependencies · 依存関係なし
 
 #### [plist](https://github.com/TooTallNate/plist.js)
 
@@ -216,32 +217,32 @@ The iOS plugin uses node-xcode to add MEMELib.framework to Xcode's Embedded Bina
 
 * plistで使用
 * MIT License
-* No dependency · 依存関係なし
+* No dependencies · 依存関係なし
 
 #### [util-deprecate](https://github.com/TooTallNate/util-deprecate)
 
 * plistで使用
 * MIT License
-* No dependency · 依存関係なし
+* No dependencies · 依存関係なし
 
 #### [xmlbuilder](http://github.com/oozcitak/xmlbuilder-js)
 
 * plistで使用
 * MIT License
-* 依存関係
+* Dependencies: · 依存関係
 	* lodash-node
 
 #### [lodash-node](http://lodash.com/custom-builds)
 
 * xmlbuilderで使用
 * MIT License
-* No dependency · 依存関係なし
+* No dependencies · 依存関係なし
 
 #### [xmldom](https://github.com/jindw/xmldom)
 
 * plistで使用
 * MIT License
-* No dependency · 依存関係なし
+* No dependencies · 依存関係なし
 
 ### Other notes & instructions · その他流用ライブラリ
 
