@@ -150,9 +150,9 @@ The iOS plugin uses node-xcode to add MEMELib.framework to Xcode's Embedded Bina
 * Dependency · 依存関係
 
 ```
-├─ node-uuid                # Dual License under MIT and GPL
-├─ pegjs                    # MIT License
-└─ simple-plist             # MIT License
+├─ node-uuid                  # Dual License under MIT and GPL
+├─ pegjs                      # MIT License
+└─ simple-plist               # MIT License
     ├─ bplist-creator         # MIT License
     │   └─ stream-buffers     # Unlicense
     ├─ bplist-parser          # MIT License
