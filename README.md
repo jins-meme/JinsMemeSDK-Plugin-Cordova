@@ -35,10 +35,10 @@
 * JSONオブジェクトでエラーcodeとmessageを返す
 
 ```
-{
-    code: -100,
-    message: "some message" 
-}
+    {
+        code: -100,
+        message: "some message" 
+    }
 ```
 
 #### エラーコード
