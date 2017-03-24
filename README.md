@@ -1,9 +1,9 @@
 # JINS MEME SDK Cordova Plugin
 
-## Plug-in structure · プラグイン構造
+## プラグイン構造 · Plug-in structure
 
 ```
-├── README.md                              # This document · 本文書
+├── README.md                              # This document · 本文書 · 
 ├── hooks
 │   ├── android_after_plugin_install.js    # インストール時フックスクリプト(Android)
 │   ├── android_before_plugin_uninstall.js # アンインストール時フックスクリプト(Android)
@@ -22,16 +22,16 @@
 │       ├── JinsMemePlugin.m
 │       └── MEMELib.framework
 └── www
-    └── jins_meme_plugin.js                # Cordova interface · JavaScriptインタフェース
+    └── jins_meme_plugin.js                # Cordova interface · JavaScriptインタフェース · 
 ```
 
 ## JavaScript API
 
-### Error codes · エラーオブジェクト
+### エラーオブジェクト · Error codes
 
-#### Error structure · 構造
+#### 構造 · Error structure
 
-* Example · JSONオブジェクトでエラーcodeとmessageを返す
+* JSONオブジェクトでエラーcodeとmessageを返す · Example JSON error object
 
 ```json
     {
@@ -40,15 +40,15 @@
     }
 ```
 
-#### Error codes · エラーコード
+#### エラーコード · Error codes
 
-* Connection status · プラグイン独自
+* プラグイン独自 · Connection status
 
 ```
-Initialization failure: -100  · 初期化失敗
-Uninitialized         : -101  · 未初期化
-Scanning in progress  : -102  · スキャン中
-Disconnected          : -103  · 未接続 
+初期化失敗 · Initialization failure : -100
+未初期化 · Uninitialized            : -101
+スキャン中 · Scanning in progress     : -102
+未接続  · Disconnected              : -103
 ```
 
 * MemeStatus
@@ -69,7 +69,7 @@ MEME_ERROR_BL_OFF    : 8
 
 ### CalibStatus
 
-* isCalibStatus returns the following codes: · isCalibStatusで取得した値を以下の数値に変換して返す
+* isCalibStatusで取得した値を以下の数値に変換して返す · isCalibStatus returns the following codes:
 
 ```
 CALIB_NOT_FINISHED : 0
@@ -81,7 +81,7 @@ UNKNOWN            :-1  # その他
 
 ### Reported Data
 
-* JSON object returned from startDataReport · JSONオブジェクトでデータを返す
+* JSONオブジェクトでデータを返す · JSON object returned from startDataReport
 
 ```json
 {
@@ -110,29 +110,29 @@ UNKNOWN            :-1  # その他
 
 * JINS MEME SDK Android 1.1.4
 
-### Application settings · アプリ設定
+### アプリ設定 · Application settings
 
 Make sure that Bluetooth is enabled
 
-* Settings · 設定 => Apps => Turn on Bluetooth · 「該当アプリ」でBluetoothをONにすること
+* 設定 · Settings => Apps => 「該当アプリ」でBluetoothをONにすること · Turn on Bluetooth
 
-### Dependencies · 依存するライブラリ等
+### 依存するライブラリ等 · Dependencies
 
-* The plugin uses the following script to change the targetSdkVersion of AndroidManifest.xml · AndroidプラグインではAndroidManifest.xmlのtargetSdkVersionを変更するために以下のスクリプトを使用している
+* AndroidプラグインではAndroidManifest.xmlのtargetSdkVersionを変更するために以下のスクリプトを使用している · The plugin uses the following script to change the targetSdkVersion of AndroidManifest.xml
 
 #### android_after_plugin_install.js
 
-* Cordova hook script · cordovaのフックスクリプト
-* Change android: targetSdkVersion in AndroidManifest.xml to 22 · AndroidManifest.xmlのandroid:targetSdkVersionを22に変更
-	* Solves Bluetooth permission problem · BluetoothのPermission問題を解決するため
-	* Version 23 and above cause an error · 23以上だとエラーが発生
-		* Occurs even if ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION are listed as permissions · ACCESS_COARSE_LOCATIONとACCESS_FINE_LOCATIONを記述していても、エラーとなってしまう
-		* Upgrading Gradle permits 23 and up, but updating from Cordova cli is difficult · gradleのバージョンを上げれば23以上でも対応可能だが、Cordovaコマンドからの更新は難しい
-	* Save original targetSdkVersion in hooks / original_version file · 元々のtargetSdkVersionをhooks/original_versionファイルに保存
+* cordovaのフックスクリプト · Cordova hook script
+* AndroidManifest.xmlのandroid:targetSdkVersionを22に変更 · Change android: targetSdkVersion in AndroidManifest.xml to 22
+	* BluetoothのPermission問題を解決するため · Solves Bluetooth permission problem
+	* 23以上だとエラーが発生 · Version 23 and above cause an error
+		* ACCESS_COARSE_LOCATIONとACCESS_FINE_LOCATIONを記述していても、エラーとなってしまう · Occurs even if ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION are listed as permissions
+		* gradleのバージョンを上げれば23以上でも対応可能だが、Cordovaコマンドからの更新は難しい · Upgrading Gradle permits 23 and up, but updating from Cordova cli is difficult
+	* 元々のtargetSdkVersionをhooks/original_versionファイルに保存 · Save original targetSdkVersion in hooks / original_version file
 
 #### android_before_plugin_uninstall.js
 
-* When removing the JINS MEME plug-in, undo android: targetSdkVersion in AndroidManifest.xml · JINS MEMEプラグインを取り除く際に、AndroidManifest.xmlのandroid:targetSdkVersionを元に戻す
+* JINS MEMEプラグインを取り除く際に、AndroidManifest.xmlのandroid:targetSdkVersionを元に戻す · When removing the JINS MEME plug-in, undo android: targetSdkVersion in AndroidManifest.xml
 
 ## iOS
 
@@ -140,14 +140,14 @@ Make sure that Bluetooth is enabled
 
 * JINS MEME SDK iOS 1.1.2
 
-### Node.js modules · 依存するnodejsモジュール
+### 依存するnodejsモジュール · Node.js modules
 
-The iOS plugin uses node-xcode to add MEMELib.framework to Xcode's Embedded Binaries. Basically, node xcode and its dependency library can be used with MIT License and Unlicense. Various details and dependencies are as follows: · iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加するためにnode-xcodeを使用している。node-xcodeとその依存ライブラリは基本的にMIT LicenseとUnlicenseで使用可能である。各種詳細と依存関係は以下の通り。
+iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加するためにnode-xcodeを使用している。node-xcodeとその依存ライブラリは基本的にMIT LicenseとUnlicenseで使用可能である。各種詳細と依存関係は以下の通り。 · The iOS plugin uses node-xcode to add MEMELib.framework to Xcode's Embedded Binaries. Basically, node xcode and its dependency library can be used with MIT License and Unlicense. Various details and dependencies are as follows:
 
 #### [node-xcode](https://github.com/kurtisf/node-xcode)
 
 * MIT License
-* Dependency · 依存関係
+* 依存関係 · Dependency
 
 ```
 ├─ node-uuid                  # Dual License under MIT and GPL
@@ -168,19 +168,19 @@ The iOS plugin uses node-xcode to add MEMELib.framework to Xcode's Embedded Bina
 
 * node-xcodeで使用
 * Dual licensed under the [MIT](http://en.wikipedia.org/wiki/MIT_License) and [GPL](http://en.wikipedia.org/wiki/GNU_General_Public_License) licenses.
-* No dependencies · 依存関係なし
+* 依存関係なし · No dependencies
 
 #### [pegjs](http://pegjs.org/)
 
 * node-xcodeで使用
 * MIT License
-* No dependencies · 依存関係なし
+* 依存関係なし · No dependencies
 
 #### [simple-plist](https://github.com/wollardj/node-simple-plist)
 
 * node-xcodeで使用
 * MIT License
-* 依存関係
+* 依存関係 · 
 	* bplist-creator
 	* bplist-parser
 	* plist
@@ -189,20 +189,20 @@ The iOS plugin uses node-xcode to add MEMELib.framework to Xcode's Embedded Bina
 
 * simple-plistで使用
 * MIT License
-* Dependencies: · 依存関係
+* 依存関係 ·  · Dependencies:
 	* stream-buffers
 
 #### [stream-parser](https://github.com/samcday/node-stream-buffer)
 
 * bplist-creatorで使用
 * [UNLICENSE](http://unlicense.org/)
-* No dependencies · 依存関係なし
+* 依存関係なし · No dependencies
 
 #### [bplist-creator](https://github.com/joeferner/node-bplist-parser)
 
 * simple-plistで使用
 * MIT License
-* No dependencies · 依存関係なし
+* 依存関係なし · No dependencies
 
 #### [plist](https://github.com/TooTallNate/plist.js)
 
@@ -217,32 +217,32 @@ The iOS plugin uses node-xcode to add MEMELib.framework to Xcode's Embedded Bina
 
 * plistで使用
 * MIT License
-* No dependencies · 依存関係なし
+* 依存関係なし · No dependencies
 
 #### [util-deprecate](https://github.com/TooTallNate/util-deprecate)
 
 * plistで使用
 * MIT License
-* No dependencies · 依存関係なし
+*依存関係なし No dependencies
 
 #### [xmlbuilder](http://github.com/oozcitak/xmlbuilder-js)
 
 * plistで使用
 * MIT License
-* Dependencies: · 依存関係
+* 依存関係 · Dependencies:
 	* lodash-node
 
 #### [lodash-node](http://lodash.com/custom-builds)
 
 * xmlbuilderで使用
 * MIT License
-* No dependencies · 依存関係なし
+*依存関係なし No dependencies
 
 #### [xmldom](https://github.com/jindw/xmldom)
 
 * plistで使用
 * MIT License
-* No dependencies · 依存関係なし
+*依存関係なし No dependencies
 
 ### Other notes & instructions · その他流用ライブラリ
 
