@@ -3,7 +3,7 @@
 ## プラグイン構造 · Plug-in structure
 
 ```
-├── README.md                              # This document · 本文書 · 
+├── README.md                              # 本文書 · This document
 ├── hooks
 │   ├── android_after_plugin_install.js    # インストール時フックスクリプト(Android)
 │   ├── android_before_plugin_uninstall.js # アンインストール時フックスクリプト(Android)
@@ -22,7 +22,7 @@
 │       ├── JinsMemePlugin.m
 │       └── MEMELib.framework
 └── www
-    └── jins_meme_plugin.js                # Cordova interface · JavaScriptインタフェース · 
+    └── jins_meme_plugin.js                # JavaScriptインタフェース · Cordova interface
 ```
 
 ## JavaScript API
