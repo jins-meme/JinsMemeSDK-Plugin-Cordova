@@ -34,7 +34,7 @@
 
 * JSONオブジェクトでエラーcodeとmessageを返す
 
-	```
+```
 {
     code: -100,
     message: "some message" 
@@ -45,7 +45,7 @@
 
 * プラグイン独自
 
-	```
+```
 初期化失敗　: -100
 未初期化　　: -101
 スキャン中　: -102
@@ -54,7 +54,7 @@
 
 * MemeStatus
 
-	```
+```
 OK                   : 0
 ERROR                : 1
 ERROR_SDK_AUTH       : 2
@@ -72,7 +72,7 @@ MEME_ERROR_BL_OFF    : 8
 
 * isCalibStatusで取得した値を以下の数値に変換して返す
 
-	```
+```
 CALIB_NOT_FINISHED : 0
 CALIB_BODY_FINISHED: 1
 CALIB_EYE_FINISHED : 2
@@ -84,7 +84,7 @@ CALIB_BOTH_FINISHED: 3
 
 * JSONオブジェクトでデータを返す
 
-	```
+```
 {
     eyeMoveUp: 0,
     eyeMoveDown: 0,
@@ -149,7 +149,7 @@ iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加�
 * MIT License
 * 依存関係
 
-	```
+```
 ├─ node-uuid                # Dual License under MIT and GPL
 ├─ pegjs                    # MIT License
 └─ simple-plist             # MIT License
