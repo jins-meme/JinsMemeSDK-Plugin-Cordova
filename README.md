@@ -33,7 +33,7 @@
 
 * Example · JSONオブジェクトでエラーcodeとmessageを返す
 
-```
+```json
     {
         code: -100,
         message: "some message" 
@@ -83,7 +83,7 @@ UNKNOWN            :-1  # その他
 
 * JSON object returned from startDataReport · JSONオブジェクトでデータを返す
 
-```
+```json
 {
     eyeMoveUp: 0,
     eyeMoveDown: 0,
