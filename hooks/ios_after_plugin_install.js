@@ -108,7 +108,7 @@ module.exports = function(context) {
     const frameworkFilesToEmbed = fromDir(pluginPathInPlatformIosDir ,'.framework', false, true);
     process.chdir('../../');
 
-    if(!frameworkFilesToEmbed.length) return;
+    if(!frameworkFilesToEmbed) return;
 
     myProj.addBuildPhase(frameworkFilesToEmbed, 'PBXCopyFilesBuildPhase', groupName, myProj.getFirstTarget().uuid, 'frameworks');
 
