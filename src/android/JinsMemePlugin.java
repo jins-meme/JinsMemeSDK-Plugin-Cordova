@@ -71,7 +71,7 @@ public class JinsMemePlugin extends CordovaPlugin {
         debug("execute " + action + ", " + args.toString());
 
         if (action.equals("setAppClientID")) {
-            if(cordova.getActivity() == null) {
+            if(!cordova.getActivity()) {
                 return false;
             }
             setAppClientId(cordova.getActivity().getApplicationContext(), args.getString(0), args.getString(1), callbackContext);
@@ -254,7 +254,7 @@ public class JinsMemePlugin extends CordovaPlugin {
         MemeStatus status = memeLib.startScan(new MemeScanListener() {
             @Override
             public void memeFoundCallback(final String address) {
-                if(cordova.getActivity() == null) {
+                if(!cordova.getActivity()) {
                     return false;
                 }
 
@@ -323,7 +323,7 @@ public class JinsMemePlugin extends CordovaPlugin {
         MemeStatus status = memeLib.startDataReport(new MemeRealtimeListener() {
             @Override
             public void memeRealtimeCallback(final MemeRealtimeData memeRealtimeData) {
-                if(cordova.getActivity() == null) {
+                if(!cordova.getActivity()) {
                     return false;
                 }
 
@@ -478,7 +478,7 @@ public class JinsMemePlugin extends CordovaPlugin {
             memeLib.setMemeConnectListener(new MemeConnectListener() {
                 @Override
                 public void memeConnectCallback(boolean status) {
-                    if(cordova.getActivity() == null) {
+                    if(!cordova.getActivity()) {
                         return false;
                     }
 
@@ -493,7 +493,7 @@ public class JinsMemePlugin extends CordovaPlugin {
 
                 @Override
                 public void memeDisconnectCallback() {
-                    if(cordova.getActivity() == null) {
+                    if(!cordova.getActivity()) {
                         return false;
                     }
                     
