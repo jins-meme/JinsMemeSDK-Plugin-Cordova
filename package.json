@@ -22,8 +22,8 @@
     "jinsmeme",
     "bluetooth"
   ],
-  "author": "",
-  "license": "",
+  "author": "JINS",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/jins-meme/JinsMemeSDK-Plugin-Cordova/issues"
   },
