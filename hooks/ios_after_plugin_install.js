@@ -1,86 +1,148 @@
-var fs = require("fs");
-var path = require("path");
-var child_process = require("child_process");
+
+// http://stackoverflow.com/a/36723619
+
+'use strict';
+
+const fs = require('fs'),
+    path = require('path'),
+    child_process = require("child_process");
 
 module.exports = function(context) {
+
     // Temporary hack to run npm install on this plugin's package.json dependencies.
     var pluginDir = path.resolve(__dirname, "../");
 
-    //BT commented -> incompatibility error with Meteor/cordova
-    // child_process.execSync("npm --prefix " + pluginDir + " install " + pluginDir);
-    child_process.exec("npm --prefix " + pluginDir + " install " + pluginDir, function(){
-      var xcode = require("xcode");
+    child_process.execSync("npm --prefix " + pluginDir + " install " + pluginDir);
+    var xcode = require("xcode");
 
-      // Need a promise so that the install waits for us to complete our project modifications
-      // before the plugin gets installed.
-      var Q = context.requireCordovaModule("q");
-      var deferral = new Q.defer();
+    if(process.length >=5 && process.argv[1].indexOf('cordova') == -1) {
+        if(process.argv[4] != 'ios') {
+            return; // plugin only meant to work for ios platform.
+        }
+    }
 
-      var platforms = context.opts.cordova.platforms;
+    function fromDir(startPath,filter, rec, multiple){
+        if (!fs.existsSync(startPath)){
+            console.log("no dir ", startPath);
+            return;
+        }
 
-      // We can bail out if the iOS platform isn't present.
-      if (platforms.indexOf("ios") === -1) {
-          deferral.resolve();
-          return deferral.promise;
-      }
+        const files=fs.readdirSync(startPath);
+        var resultFiles = []
+        for(var i=0;i<files.length;i++){
+            var filename=path.join(startPath,files[i]);
+            var stat = fs.lstatSync(filename);
+            if (stat.isDirectory() && rec){
+                fromDir(filename,filter); //recurse
+            }
 
-      // We need to add the Braintree frameworks to the project here.
-      // They need to be embedded binaries and cordova does not yet support that.
-      // We will use node-xcode directy to add them since that library has
-      // been upgraded to support embedded binaries.
+            if (filename.indexOf(filter)>=0) {
+                if (multiple) {
+                    resultFiles.push(filename);
+                } else {
+                    return filename;
+                }
+            }
+        }
+        if(multiple) {
+            return resultFiles;
+        }
+    }
 
-      // Cordova libs to get the project path and project name so we can locate the xcode project file.
-      var cordova_util = context.requireCordovaModule("cordova-lib/src/cordova/util"),
-          ConfigParser = context.requireCordovaModule("cordova-lib").configparser,
-          projectRoot = cordova_util.isCordova(),
-          xml = cordova_util.projectConfig(projectRoot),
-          cfg = new ConfigParser(xml);
+    function getFileIdAndRemoveFromFrameworks(myProj, fileBasename) {
+        var fileId = '';
+        const pbxFrameworksBuildPhaseObjFiles = myProj.pbxFrameworksBuildPhaseObj(myProj.getFirstTarget().uuid).files;
+        for(var i=0; i<pbxFrameworksBuildPhaseObjFiles.length;i++) {
+            var frameworkBuildPhaseFile = pbxFrameworksBuildPhaseObjFiles[i];
+            if(frameworkBuildPhaseFile.comment && frameworkBuildPhaseFile.comment.indexOf(fileBasename) != -1) {
+                fileId = frameworkBuildPhaseFile.value;
+                pbxFrameworksBuildPhaseObjFiles.splice(i,1); // MUST remove from frameworks build phase or else CodeSignOnCopy won't do anything.
+                break;
+            }
+        }
+        return fileId;
+    }
 
-      var projectPath = path.join(projectRoot, "platforms", "ios", cfg.name() + ".xcodeproj", "project.pbxproj");
-      var xcodeProject = xcode.project(projectPath);
+    function getFileRefFromName(myProj, fName) {
+        const fileReferences = myProj.hash.project.objects['PBXFileReference'];
+        var fileRef = '';
+        for(var ref in fileReferences) {
+            if(ref.indexOf('_comment') == -1) {
+                var tmpFileRef = fileReferences[ref];
+                if(tmpFileRef.name && tmpFileRef.name.indexOf(fName) != -1) {
+                    fileRef = ref;
+                    break;
+                }
+            }
+        }
+        return fileRef;
+    }
 
-      xcodeProject.parse(function(err) {
+    const xcodeProjPath = fromDir('platforms/ios','.xcodeproj', false);
+    const projectPath = xcodeProjPath + '/project.pbxproj';
+    const myProj = xcode.project(projectPath);
 
-          // If we couldn't parse the project, bail out.
-          if (err){
-              deferral.reject("JINS MEME SDK - ios_after_plugin_install: " + JSON.stringify(err));
-              return;
-          }
+    function addRunpathSearchBuildProperty(proj, build) {
+       const LD_RUNPATH_SEARCH_PATHS =  proj.getBuildProperty("LD_RUNPATH_SEARCH_PATHS", build);
+       if(!LD_RUNPATH_SEARCH_PATHS) {
+          proj.addBuildProperty("LD_RUNPATH_SEARCH_PATHS", "\"$(inherited) @executable_path/Frameworks\"", build);
+       } else if(LD_RUNPATH_SEARCH_PATHS.indexOf("@executable_path/Frameworks") == -1) {
+          var newValue = LD_RUNPATH_SEARCH_PATHS.substr(0,LD_RUNPATH_SEARCH_PATHS.length-1);
+          newValue += ' @executable_path/Frameworks\"';
+          proj.updateBuildProperty("LD_RUNPATH_SEARCH_PATHS", newValue, build);
+       }
+    }
 
-          // Cordova project should not have more that one target.
-          var targetUUID = xcodeProject.getFirstTarget().uuid;
+    myProj.parseSync();
+    addRunpathSearchBuildProperty(myProj, "Debug");
+    addRunpathSearchBuildProperty(myProj, "Release");
 
-          // Remove all of the frameworks because they were not embeded correctly.
-          var frameworkPath = cfg.name() + "/Plugins/com.jins_jp.meme.plugin/";
-          xcodeProject.removeFramework(frameworkPath + "MEMELib.framework", {customFramework: true, embed: true, link: true});
+    // unquote (remove trailing ")
+    var projectName = myProj.getFirstTarget().firstTarget.name.substr(1);
+    projectName = projectName.substr(0, projectName.length-1); //Removing the char " at beginning and the end.
 
-          // First check to see if the Embed Framework node exists, if not, add it.
-          // This is all we need to do as they are added to the embedded section by default.
-          if (!xcodeProject.pbxEmbedFrameworksBuildPhaseObj(targetUUID)) {
-              buildPhaseResult = xcodeProject.addBuildPhase([], "PBXCopyFilesBuildPhase", "Embed Frameworks", targetUUID,  "framework");
-              // No idea why, but "Framework" (value 10) is not available in node-xcode, set it here manually so libraries
-              // embed correctly.  If we don't set it, the folder type defaults to "Shared Frameworks".
-              buildPhaseResult.buildPhase.dstSubfolderSpec = 10;
-              console.log("Adding Embedded Build Phase");
-          }
-          else {
-              console.log("Embedded Build Phase already added");
-          }
+    const groupName = 'Embed Frameworks ' + context.opts.plugin.id;
+    const pluginPathInPlatformIosDir = projectName + '/Plugins/' + context.opts.plugin.id;
 
-          // This is critical to include, otherwise the library loader cannot find the dynamic Braintree libs at runtime
-          // on a device.
-          xcodeProject.addBuildProperty("LD_RUNPATH_SEARCH_PATHS", "\"$(inherited) @executable_path/Frameworks\"", "Debug");
-          xcodeProject.addBuildProperty("LD_RUNPATH_SEARCH_PATHS", "\"$(inherited) @executable_path/Frameworks\"", "Release");
+    process.chdir('./platforms/ios');
+    const frameworkFilesToEmbed = fromDir(pluginPathInPlatformIosDir ,'.framework', false, true);
+    process.chdir('../../');
 
-          // Add the frameworks again.  This time they will have the code-sign option set so they get code signed when being deployed to devices.
-          xcodeProject.addFramework(frameworkPath + "MEMELib.framework", {customFramework: true, embed: true, link: true});
+    if(!frameworkFilesToEmbed) return;
 
-          // Save the project file back to disk.
-          fs.writeFileSync(projectPath, xcodeProject.writeSync(), "utf-8");
-          console.log("Finished BrainTreePlugin ios_after install", projectPath);
-          deferral.resolve();
-      });
+    myProj.addBuildPhase(frameworkFilesToEmbed, 'PBXCopyFilesBuildPhase', groupName, myProj.getFirstTarget().uuid, 'frameworks');
 
-      return deferral.promise;
-    });
+    for(var frmFileFullPath of frameworkFilesToEmbed) {
+        var justFrameworkFile = path.basename(frmFileFullPath);
+        var fileRef = getFileRefFromName(myProj, justFrameworkFile);
+        var fileId = getFileIdAndRemoveFromFrameworks(myProj, justFrameworkFile);
+
+        // Adding PBXBuildFile for embedded frameworks
+        var file = {
+            uuid: fileId,
+            basename: justFrameworkFile,
+            settings: {
+                ATTRIBUTES: ["CodeSignOnCopy", "RemoveHeadersOnCopy"]
+            },
+
+            fileRef:fileRef,
+            group:groupName
+        };
+        myProj.addToPbxBuildFileSection(file);
+
+
+        // Adding to Frameworks as well (separate PBXBuildFile)
+        var newFrameworkFileEntry = {
+            uuid: myProj.generateUuid(),
+            basename: justFrameworkFile,
+
+            fileRef:fileRef,
+            group: "Frameworks"
+        };
+        myProj.addToPbxBuildFileSection(newFrameworkFileEntry);
+        myProj.addToPbxFrameworksBuildPhase(newFrameworkFileEntry);
+    }
+
+    fs.writeFileSync(projectPath, myProj.writeSync());
+    console.log('Embedded Frameworks In ' + context.opts.plugin.id);
 };

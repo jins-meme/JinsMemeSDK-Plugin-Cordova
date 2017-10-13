@@ -47,7 +47,7 @@ class Message {
      * @param data some boolean value
      * @return 1: true, 0: false
      */
-    static int covertToInt(final boolean data) {
+    static int convertToInt(final boolean data) {
         return data ? 1 : 0;
     }
 
@@ -57,7 +57,7 @@ class Message {
      * @param memeRealtimeData JINS MEME real time data
      * @return json object
      */
-    static JSONObject covertToJSONObject(final MemeRealtimeData memeRealtimeData) throws JSONException {
+    static JSONObject convertToJSONObject(final MemeRealtimeData memeRealtimeData) throws JSONException {
         JSONObject data = new JSONObject();
 
         data.put("eyeMoveUp", memeRealtimeData.getEyeMoveUp());

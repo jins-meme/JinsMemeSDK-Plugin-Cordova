@@ -1,0 +1,31 @@
+{
+  "name": "cordova-plugin-jins-meme",
+  "version": "1.0.0",
+  "description": "A Cordova plugin for the Jins Meme SDK",
+  "main": " ",
+  "dependencies": {
+    "xcode": "^0.8.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jins-meme/JinsMemeSDK-Plugin-Cordova.git"
+  },
+  "keywords": [
+    "cordova",
+    "cordova-android",
+    "cordova-ios",
+    "jins",
+    "jinsmeme",
+    "bluetooth"
+  ],
+  "author": "JINS",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jins-meme/JinsMemeSDK-Plugin-Cordova/issues"
+  },
+  "homepage": "https://github.com/jins-meme/JinsMemeSDK-Plugin-Cordova#readme"
+}
