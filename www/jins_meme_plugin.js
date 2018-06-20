@@ -174,15 +174,22 @@ JinsMemePlugin.disconnect = function(success, error) {
  *
  * @param {Function} success function(Object) {}
  * @param {Function} error function(error) {} (OPTIONAL)
+ * @param {Object} options {bufferSize: 12000} (OPTIONAL)
  * @example
  *    JinsMemePlugin.startDataReport(function(data) {
  *        // this method is called some times.
  *        // data = MemeRealtimeData
+ *    }, function() {
+ *        // handle error
+ *    }, {
+ *        rtBackground: true, // take RT mode data even though app is in background
+ *        rtBufferSize: 12000 // max 72000
  *    });
  */
-JinsMemePlugin.startDataReport = function(success, error) {
-    argscheck.checkArgs('fF', 'JinsMemePlugin.startDataReport', arguments);
-    exec(success, error, 'JinsMemePlugin', 'startDataReport', []);
+JinsMemePlugin.startDataReport = function(success, error, options) {
+    options = options || {};
+    argscheck.checkArgs('fFO', 'JinsMemePlugin.startDataReport', arguments);
+    exec(success, error, 'JinsMemePlugin', 'startDataReport', [options]);
 };
 
 /**

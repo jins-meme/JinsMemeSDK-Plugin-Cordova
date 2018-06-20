@@ -52,7 +52,12 @@ module.exports = function(context) {
 
           // Remove all of the frameworks because they were not embeded correctly.
           var frameworkPath = cfg.name() + "/Plugins/com.jins_jp.meme.plugin/";
-          xcodeProject.removeFramework(frameworkPath + "MEMELib.framework", {customFramework: true, embed: true, link: true});
+
+          try {
+              fs.statSync(frameworkPath + "MEMELib.framework")
+              xcodeProject.removeFramework(frameworkPath + "MEMELib.framework", {customFramework: true, embed: true, link: true});
+          } catch (e) {
+          }
 
           // First check to see if the Embed Framework node exists, if not, add it.
           // This is all we need to do as they are added to the embedded section by default.

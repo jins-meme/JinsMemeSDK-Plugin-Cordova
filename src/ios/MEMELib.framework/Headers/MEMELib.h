@@ -9,17 +9,26 @@
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
+#import "MEMEStandardData.h"
 #import "MEMERealTimeData.h"
+#import "MEMEStdDataAverage.h"
 
 FOUNDATION_EXPORT double MEMEVersionNumber;
 FOUNDATION_EXPORT const unsigned char MEMEVersionString[];
+
+
+// Communication Mode
+typedef enum {
+    MEME_COM_UNKNOWN  = 0,    // No Connection
+    MEME_COM_STANDARD = 1,      // Standard Mode
+    MEME_COM_REALTIME = 2,       // RealTime Mode
+} MEMEDataMode;
 
 // MEME Device Type
 typedef enum {
     ES  = 0,
     MT = 1,
 } MEMEType;
-
 
 // Calibration Status
 typedef enum {
@@ -36,10 +45,10 @@ typedef enum {
     MEME_ERROR_SDK_AUTH     = 2, // SDK Auth Error
     MEME_ERROR_APP_AUTH     = 3, // App Auth Error
     MEME_ERROR_CONNECTION   = 4, // No Connection
-    MEME_DEVICE_INVALID     = 5, // Invalid Device
-    MEME_CMD_INVALID        = 6, // Invalid Command
+    MEME_DEVICE_INVALID     = 5,
+    MEME_CMD_INVALID        = 6,
     MEME_ERROR_FW_CHECK     = 7, // FW Version Error
-    MEME_ERROR_BL_OFF       = 8  // Bluetooth is Off
+    MEME_ERROR_BL_OFF       = 8
 } MEMEStatus;
 
 
@@ -53,6 +62,7 @@ extern NSString *MEMELibAppAuthorizedNotification;
 extern NSString *MEMELibPeripheralFoundNotification;
 extern NSString *MEMELibPeripheralConnectedNotification;
 extern NSString *MEMELibPeripheralDisconnetedNotification;
+extern NSString *MEMELibStandardModeDataReceivedNotification;
 extern NSString *MEMELibRealtimeModeDataReceivedNotification;
 extern NSString *MEMELibCommandResponseNotification;
 extern NSString *MEMELibDeviceInfoUpdatedNotification;
@@ -76,6 +86,7 @@ extern NSString *MEMELibResponseCommandResultUserInfoKey;
 - (void) memePeripheralConnected: (CBPeripheral *)peripheral;
 - (void) memePeripheralDisconnected: (CBPeripheral *)peripheral;
 
+- (void) memeStandardModeDataReceived: (MEMEStandardData *) data;
 - (void) memeRealTimeModeDataReceived: (MEMERealTimeData *) data;
 
 - (void) memeCommandResponse: (MEMEResponse) response;
@@ -83,6 +94,7 @@ extern NSString *MEMELibResponseCommandResultUserInfoKey;
 - (void) memeAppAuthorized: (MEMEStatus) status;
 
 - (void) memeDeviceInfoUpdated;
+
 @end
 
 
@@ -97,10 +109,7 @@ extern NSString *MEMELibResponseCommandResultUserInfoKey;
 @property (readonly) BOOL isAutoConnect;
 
 + (MEMELib *)sharedInstance;
-
-#pragma mark AUTH
-
-+ (void) setAppClientId: (NSString *) clientId clientSecret: (NSString *) clientSecret;
++ (void) setAppClientId: (NSString *) _clientId clientSecret: (NSString *) _clientSecret;
 
 #pragma mark CONNECTION
 
@@ -110,15 +119,16 @@ extern NSString *MEMELibResponseCommandResultUserInfoKey;
 - (MEMEStatus) connectPeripheral:(CBPeripheral *)peripheral;
 - (MEMEStatus) disconnectPeripheral;
 
-- (NSArray *) getConnectedByOthers;
 - (void) setAutoConnect: (BOOL) flag;
 
 #pragma mark DEVICE
 
 - (MEMEStatus) startDataReport;
+- (MEMEStatus) startDataReport: (MEMEDataMode) mode;
 - (MEMEStatus) stopDataReport;
+- (MEMEDataMode) getDataMode;
 
-#pragma mark DEVICE INFO
+#pragma mark INFO
 
 - (NSString *) getSDKVersion;
 - (NSString *) getFWVersion;
@@ -126,5 +136,8 @@ extern NSString *MEMELibResponseCommandResultUserInfoKey;
 
 - (int) getConnectedDeviceType;
 - (int) getConnectedDeviceSubType;
+
+- (NSArray *) getConnectedByOthers;
+
 
 @end

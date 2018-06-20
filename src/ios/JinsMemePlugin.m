@@ -3,6 +3,7 @@
 #import <Cordova/CDV.h>
 #import <MEMELib/MEMELib.h>
 #import "JinsMemeMessage.h"
+#import "JinsMemeRtDataBuffer.h"
 
 @interface JinsMemePlugin : CDVPlugin <MEMELibDelegate> {
     // Member variables go here.
@@ -15,6 +16,7 @@
     CDVInvokedUrlCommand* _scanCommand;
     CDVInvokedUrlCommand* _connectCommand;
     CDVInvokedUrlCommand* _reportCommand;
+    JinsMemeRtDataBuffer* _buffer;
 }
 
 - (void)setAppClientID:(CDVInvokedUrlCommand*)command;
@@ -59,6 +61,7 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
     _scanCommand = nil;
     _connectCommand = nil;
     _reportCommand = nil;
+    _buffer = [[JinsMemeRtDataBuffer alloc] init];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onAppDidBecomeActive:)
                                                  name:UIApplicationDidBecomeActiveNotification
@@ -79,13 +82,28 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
     NSLog(@"%@",@"applicationDidBecomeActive");
     BOOL currIsConnected = [[MEMELib sharedInstance] isConnected];
     _isActive = YES;
-
+    
     if (_prevIsConnected != currIsConnected && nil != _connectCommand) {
         int status = currIsConnected ? 1 : 0;
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                 messageAsDictionary:[self getConnectionData:_connectedUuid status:status]];
         [result setKeepCallbackAsBool:YES];
         [self sendResult:result command:_connectCommand];
+    }
+
+    @synchronized(self) {
+        NSLog(@"become active: %ld", [_buffer getSize]);
+        if (_reportCommand && [_buffer getSize] > 0) {
+            NSDictionary* data;
+            
+            while ((data = [_buffer poll])) {
+                CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:data];
+                [result setKeepCallbackAsBool:YES];
+                [self sendResult:result command:_reportCommand];
+            }
+            
+            [_buffer clear];
+        }
     }
 }
 /**
@@ -115,7 +133,7 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
     [self.commandDelegate sendPluginResult:[self getErrorResult:JINS_MEME_PLUGIN_ERROR_NOT_INIT
                                                            with:[NSString stringWithFormat:@"Execute setAppClientId before %@", command.methodName]]
                                 callbackId:command.callbackId];
-
+    
     return YES;
 }
 /**
@@ -298,7 +316,7 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
     if ([self shouldInitalize: command]) {
         return;
     }
-
+    
     [self sendStatusResult:[[MEMELib sharedInstance] disconnectPeripheral] command: command];
 }
 /**
@@ -326,6 +344,26 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
     
     if ([self isOkStatus:status]) {
         _reportCommand = command;
+        [_buffer clear];
+        NSDictionary *options;
+        
+        if ([command.arguments count] > 0) {
+            options = [command.arguments objectAtIndex:0];
+        } else {
+            options = [[NSDictionary alloc] init];
+        }
+        
+        if ([options objectForKey:@"rtBackground"]) {
+            [_buffer setAvailable:[[options objectForKey:@"rtBackground"] boolValue]];
+        } else {
+            [_buffer setAvailable:NO];
+        }
+        
+        if ([options objectForKey:@"rtBufferSize"]) {
+            [_buffer setSize: [[options objectForKey:@"rtBufferSize"] intValue]];
+        } else {
+            [_buffer setDefaultSize];
+        }
     } else {
         [self sendResult:[self getErrorResult:status] command:command];
     }
@@ -367,7 +405,7 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
         return;
     }
     
-
+    
     NSArray* peripherals = [[MEMELib sharedInstance] getConnectedByOthers];
     NSMutableArray* items = [NSMutableArray array];
     
@@ -458,7 +496,7 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
             return YES;
         }
     }
-
+    
     return NO;
 }
 /**
@@ -484,23 +522,23 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
 {
     //    [self checkMEMEStatus: status];
     NSLog(@"MEME App Authorized %d", status);
-
+    
     if (_initialized) {
         return;
     }
-
+    
     _initialized = [self isOkStatus: status];
-
+    
     if (nil == _setAppClientIDCommand) {
         return;
     }
-
+    
     if (_initialized) {
         [self sendResult:[self getSuccessResult] command:_setAppClientIDCommand];
     } else {
         [self sendResult:[self getErrorResult:status] command:_setAppClientIDCommand];
     }
-
+    
     _setAppClientIDCommand = nil;
 }
 
@@ -509,12 +547,10 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
  */
 - (void) memePeripheralFound:(CBPeripheral*)peripheral withDeviceAddress:(NSString *)address
 {
-    if ([self hasAlreayFound:peripheral]) {
-        return;
-    }
-
     //NSLog(@"New peripheral found %@ %@", [peripheral.identifier UUIDString], address);
-    [_peripherals addObject: peripheral];
+    if (![self hasAlreayFound:peripheral]) {
+        [_peripherals addObject: peripheral];
+    }
     
     if (nil == _scanCommand) {
         return;
@@ -537,7 +573,7 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
     if (nil == _connectCommand) {
         return;
     }
-
+    
     if (_isActive) {
         _connectedUuid = [peripheral.identifier UUIDString];
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
@@ -570,15 +606,20 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
  */
 - (void) memeRealTimeModeDataReceived:(MEMERealTimeData*)data
 {
-    if (nil == _reportCommand) {
-        return;
-    }
-    
-    if (_isActive) {
-        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                                messageAsDictionary:[JinsMemeMessage convertToDictionary:data]];
-        [result setKeepCallbackAsBool:YES];
-        [self sendResult:result command:_reportCommand];
+    @synchronized(self) {
+        if (nil == _reportCommand) {
+            return;
+        }
+        
+        NSMutableDictionary* dict = [JinsMemeMessage convertToDictionary:data];
+        
+        if (_isActive) {
+            CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:dict];
+            [result setKeepCallbackAsBool:YES];
+            [self sendResult:result command:_reportCommand];
+        } else {
+            [_buffer put:dict];
+        }
     }
 }
 /**
@@ -601,3 +642,4 @@ const int JINS_MEME_PLUGIN_ERROR_NOT_CONNECTED = -103;
 }
 
 @end
+
