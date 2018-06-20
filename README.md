@@ -110,7 +110,7 @@ CALIB_BOTH_FINISHED: 3
 
 ### SDK
 
-* JINS MEME SDK Android 1.1.4
+* JINS MEME SDK Android 1.2.0
 
 ### アプリ設定
 
@@ -138,7 +138,7 @@ CALIB_BOTH_FINISHED: 3
 
 ### SDK
 
-* JINS MEME SDK iOS 1.1.2
+* JINS MEME SDK iOS 1.2.0
 
 ### 依存するnodejsモジュール
 
