@@ -4,6 +4,10 @@
 
 ver. 1.3.0: Enable background buffering.
 
+## How to use - 使い方
+
+[公式マニュアル](https://jins-meme.github.io/sdkdoc/monaca/)
+
 ## Plug-in structure - プラグイン構造
 
 ```
