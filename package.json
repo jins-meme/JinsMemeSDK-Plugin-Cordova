@@ -1,0 +1,15 @@
+{
+  "name": "JinsMemeSDK-Plugin-Cordova",
+  "version": "1.3.0",
+  "description": "JINS MEME SDK for Cordova",
+  "main": "index.js",
+  "dependencies": {
+    "xcode": "^0.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}

@@ -98,10 +98,11 @@
 /**
  * Convert MEMERealTimeData into dictionary.
  */
-+ (NSDictionary*)convertToDictionary:(MEMERealTimeData*)data
++ (NSMutableDictionary*)convertToDictionary:(MEMERealTimeData*)data
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     int noiseStatus = [data noiseStatus] ? 1 : 0;
+    long timestamp = (long)([[NSDate date] timeIntervalSince1970] * 1000);
     
     [dic setValue:[NSNumber numberWithUnsignedChar:[data eyeMoveUp]] forKey:@"eyeMoveUp"];
     [dic setValue:[NSNumber numberWithUnsignedChar:[data eyeMoveDown]] forKey:@"eyeMoveDown"];
@@ -113,12 +114,14 @@
     [dic setValue:[NSNumber numberWithFloat:[data roll]] forKey:@"roll"];
     [dic setValue:[NSNumber numberWithFloat:[data pitch]] forKey:@"pitch"];
     [dic setValue:[NSNumber numberWithFloat:[data yaw]] forKey:@"yaw"];
-    [dic setValue:[NSNumber numberWithChar:[data accX]] forKey:@"accX"];
-    [dic setValue:[NSNumber numberWithChar:[data accY]] forKey:@"accY"];
-    [dic setValue:[NSNumber numberWithChar:[data accZ]] forKey:@"accZ"];
+    [dic setValue:[NSNumber numberWithFloat:[data accX]] forKey:@"accX"];
+    [dic setValue:[NSNumber numberWithFloat:[data accY]] forKey:@"accY"];
+    [dic setValue:[NSNumber numberWithFloat:[data accZ]] forKey:@"accZ"];
     [dic setValue:[NSNumber numberWithInt:noiseStatus] forKey:@"noiseStatus"];
     [dic setValue:[NSNumber numberWithUnsignedChar:[data fitError]] forKey:@"fitError"];
     [dic setValue:[NSNumber numberWithUnsignedChar:[data powerLeft]] forKey:@"powerLeft"];
+    [dic setValue:[NSNumber numberWithBool:NO] forKey:@"isBackground"];
+    [dic setValue:[NSNumber numberWithLong:timestamp] forKey:@"timestamp"];
     
     return dic;
 }

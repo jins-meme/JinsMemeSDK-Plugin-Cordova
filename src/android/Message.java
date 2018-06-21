@@ -76,6 +76,8 @@ class Message {
         data.put("noiseStatus", memeRealtimeData.isNoiseStatus());
         data.put("fitError", memeRealtimeData.getFitError());
         data.put("powerLeft", memeRealtimeData.getPowerLeft());
+        data.put("isBackground", false);
+        data.put("timestamp", System.currentTimeMillis());
 
         return data;
     }

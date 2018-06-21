@@ -10,15 +10,23 @@
 		</data>
 		<key>Headers/MEMELib.h</key>
 		<data>
-		HGyGDdFnylvvokXvZ6VnmyQQgF8=
+		gOo4K5PbVSZksz+TLq8+KTmc0yo=
 		</data>
 		<key>Headers/MEMERealTimeData.h</key>
 		<data>
-		6KDVL9O7MVTg/dNY9v7WpEOjCLg=
+		Z2YDeKvghGJomXtQeigP4u1SsHU=
+		</data>
+		<key>Headers/MEMEStandardData.h</key>
+		<data>
+		GQa/49IzKA2sXP1/OUWxpTk1hTQ=
+		</data>
+		<key>Headers/MEMEStdDataAverage.h</key>
+		<data>
+		KGMlLBy//mAn7PvkA6kY7l2YEGA=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		SIKNx3ErIg+LqUCEQy34src16a4=
+		hgYrA3iGiefHIiUASjUKjKGDzd0=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -42,22 +50,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			HGyGDdFnylvvokXvZ6VnmyQQgF8=
+			gOo4K5PbVSZksz+TLq8+KTmc0yo=
 			</data>
 			<key>hash2</key>
 			<data>
-			CTGNJ48GmV2SqVn6vy2ueOTViIXzejHulJd2z5K4mzA=
+			aC2V3ca9eOV8O/kahUZVxlvblenvve1q5DWQ5kGM3o0=
 			</data>
 		</dict>
 		<key>Headers/MEMERealTimeData.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			6KDVL9O7MVTg/dNY9v7WpEOjCLg=
+			Z2YDeKvghGJomXtQeigP4u1SsHU=
 			</data>
 			<key>hash2</key>
 			<data>
-			SEUWvjOFUbqBoC2icvPD4eAXYpYATXaAdJgKYhxaLGc=
+			VMmLygrtNO4sc7ICGXuN0pbNxaMBCv1rTIRFQJxQnKA=
+			</data>
+		</dict>
+		<key>Headers/MEMEStandardData.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			GQa/49IzKA2sXP1/OUWxpTk1hTQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			Sl8yPlqQBwHj1d5sxAsKCGCg1Hq3ySxGl8ejLE8nbOY=
+			</data>
+		</dict>
+		<key>Headers/MEMEStdDataAverage.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			KGMlLBy//mAn7PvkA6kY7l2YEGA=
+			</data>
+			<key>hash2</key>
+			<data>
+			+RW11KaCZfGZxv5uJOCNOWvOMcPdJeyxYnfci2JrMrc=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -89,6 +119,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^version.plist$</key>
 		<true/>
@@ -134,6 +169,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^Info\.plist$</key>
 		<dict>

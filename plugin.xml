@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="com.jins_jp.meme.plugin" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="com.jins_jp.meme.plugin" version="1.3.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>JINS MEME Plugin</name>
     <description>JINS MEME SDK Plugin</description>
     <license></license>
@@ -26,6 +26,7 @@
         </config-file>
         <source-file src="src/android/JinsMemePlugin.java" target-dir="src/com/jins_jp/meme/plugin" />
         <source-file src="src/android/Message.java" target-dir="src/com/jins_jp/meme/plugin" />
+        <source-file src="src/android/RtDataBuffer.java" target-dir="src/com/jins_jp/meme/plugin" />
         <lib-file src="src/android/MemeLib.jar" />
         <framework src="com.google.code.gson:gson:2.3" />
         <hook type="after_plugin_install" src="hooks/android_after_plugin_install.js" />
@@ -46,6 +47,8 @@
         <source-file src="src/ios/JinsMemePlugin.m" />
         <header-file src="src/ios/JinsMemeMessage.h" />
         <source-file src="src/ios/JinsMemeMessage.m" />
+        <header-file src="src/ios/JinsMemeRtDataBuffer.h" />
+        <source-file src="src/ios/JinsMemeRtDataBuffer.m" />
         <framework src="src/ios/MEMELib.framework" custom="true" embed="true" />
         <framework src="CoreBluetooth.framework" />
         <hook type="after_plugin_install" src="hooks/ios_after_plugin_install.js" />

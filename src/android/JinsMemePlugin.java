@@ -17,6 +17,7 @@ import org.apache.cordova.PluginResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -56,6 +57,11 @@ public class JinsMemePlugin extends CordovaPlugin {
      * Connection handler.
      */
     private ConnectionHandler mConnectionHandler = new ConnectionHandler();
+
+    /**
+     * Real time mode data buffer.
+     */
+    private RtDataBuffer mRtDataBuffer = new RtDataBuffer();
 
     /**
      * Main method called by JavaScript.
@@ -118,7 +124,7 @@ public class JinsMemePlugin extends CordovaPlugin {
         }
 
         if (action.equals("startDataReport")) {
-            startDataReport(mMemeLib, callbackContext);
+            startDataReport(mMemeLib, callbackContext, args.getJSONObject(0));
             return true;
         } else if (action.equals("stopDataReport")) {
             stopDataReport(mMemeLib);
@@ -159,6 +165,7 @@ public class JinsMemePlugin extends CordovaPlugin {
         debug("onResume");
         mIsRunning = true;
         mConnectionHandler.onResume(mMemeLib);
+        sendRtBufferedData();
     }
 
     /**
@@ -310,8 +317,11 @@ public class JinsMemePlugin extends CordovaPlugin {
      * @param memeLib
      * @param callbackContext
      */
-    private void startDataReport(final MemeLib memeLib, final CallbackContext callbackContext) {
+    private void startDataReport(final MemeLib memeLib, final CallbackContext callbackContext, final JSONObject options) {
         mDataReportCallback = callbackContext;
+        mRtDataBuffer.clear();
+        mRtDataBuffer.setAvailable(options.optBoolean("rtBackground", false));
+        mRtDataBuffer.setSize(options.optInt("rtBufferSize", RtDataBuffer.DEFAULT_SIZE));
 
         MemeStatus status = memeLib.startDataReport(new MemeRealtimeListener() {
             @Override
@@ -319,13 +329,23 @@ public class JinsMemePlugin extends CordovaPlugin {
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (mIsRunning && isAvailable(mDataReportCallback)) {
-                            try {
-                                PluginResult result = new PluginResult(PluginResult.Status.OK, Message.covertToJSONObject(memeRealtimeData));
-                                result.setKeepCallback(true);
-                                mDataReportCallback.sendPluginResult(result);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                        if (isAvailable(mDataReportCallback)) {
+                            if (mIsRunning) {
+                                try {
+                                    PluginResult result = new PluginResult(PluginResult.Status.OK, Message.covertToJSONObject(memeRealtimeData));
+                                    result.setKeepCallback(true);
+                                    mDataReportCallback.sendPluginResult(result);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                try {
+                                    mRtDataBuffer.put(Message.covertToJSONObject(memeRealtimeData));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -346,11 +366,41 @@ public class JinsMemePlugin extends CordovaPlugin {
      * @param memeLib
      */
     private void stopDataReport(final MemeLib memeLib) {
+        sendRtBufferedData();
         mDataReportCallback = null;
 
         if (memeLib.isDataReceiving()) {
             memeLib.stopDataReport();
         }
+    }
+
+    /**
+     * Send all real time buffered data into webview.
+     */
+    private synchronized void sendRtBufferedData() {
+        if (!isAvailable(mDataReportCallback)) {
+            return;
+        }
+
+        while (true) {
+            try {
+                JSONObject data = mRtDataBuffer.poll();
+
+                if (data == null) {
+                    break;
+                }
+
+                PluginResult result = new PluginResult(PluginResult.Status.OK, data);
+                result.setKeepCallback(true);
+                mDataReportCallback.sendPluginResult(result);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace(); // fail safe
+            }
+        }
+
+        mRtDataBuffer.clear();
     }
 
     /**
