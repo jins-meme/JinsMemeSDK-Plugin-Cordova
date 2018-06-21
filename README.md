@@ -1,9 +1,13 @@
 # JINS MEME SDK Cordova Plugin
 
-## プラグイン構造
+## Change Log - 更新履歴
+
+ver. 1.3.0: Enable background buffering.
+
+## Plug-in structure - プラグイン構造
 
 ```
-├── README.md                              # 本文書
+├── README.md                              # This document - 本文書
 ├── hooks
 │   ├── android_after_plugin_install.js    # インストール時フックスクリプト(Android)
 │   ├── android_before_plugin_uninstall.js # アンインストール時フックスクリプト(Android)
@@ -28,11 +32,11 @@
 
 ## JavaScript API
 
-### エラーオブジェクト
+### Error objects - エラーオブジェクト
 
-#### 構造
+#### Error structure - 構造
 
-* JSONオブジェクトでエラーcodeとmessageを返す
+* Example JSON error object - JSONオブジェクトでエラーcodeとmessageを返す
 
 ```
 {
@@ -41,9 +45,9 @@
 }
 ```
 
-#### エラーコード
+#### Error code - エラーコード
 
-* プラグイン独自
+* Connection status - プラグイン独自
 
 ```
 初期化失敗　: -100
@@ -112,11 +116,11 @@ CALIB_BOTH_FINISHED: 3
 
 * JINS MEME SDK Android 1.2.0
 
-### アプリ設定
+### App setting - アプリ設定
 
 * 設定 => Apps => 「該当アプリ」でBluetoothをONにすること
 
-### 依存するライブラリ等
+### Dependent libraries - 依存するライブラリ等
 
 * AndroidプラグインではAndroidManifest.xmlのtargetSdkVersionを変更するために以下のスクリプトを使用している
 
@@ -140,7 +144,7 @@ CALIB_BOTH_FINISHED: 3
 
 * JINS MEME SDK iOS 1.2.0
 
-### 依存するnodejsモジュール
+### Dependent noode.js module - 依存するnodejsモジュール
 
 iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加するためにnode-xcodeを使用している。node-xcodeとその依存ライブラリは基本的にMIT LicenseとUnlicenseで使用可能である。各種詳細と依存関係は以下の通り。
 
