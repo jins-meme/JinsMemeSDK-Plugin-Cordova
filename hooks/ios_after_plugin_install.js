@@ -30,8 +30,8 @@ module.exports = function(context) {
       // been upgraded to support embedded binaries.
 
       // Cordova libs to get the project path and project name so we can locate the xcode project file.
-      var cordova_util = require('cordova-lib/src/cordova/util'),
-          ConfigParser = require('cordova-lib').configparser,
+      var cordova_util = context.requireCordovaModule("cordova-lib/src/cordova/util"),
+          ConfigParser = context.requireCordovaModule("cordova-common").ConfigParser;
           projectRoot = cordova_util.isCordova(),
           xml = cordova_util.projectConfig(projectRoot),
           cfg = new ConfigParser(xml);
