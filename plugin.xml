@@ -48,6 +48,7 @@
         <header-file src="src/ios/JinsMemeRtDataBuffer.h" />
         <source-file src="src/ios/JinsMemeRtDataBuffer.m" />
         <framework src="src/ios/MEMELib.framework" custom="true" embed="true" />
+        <hook type="after_plugin_install" src="hooks/ios_after_plugin_install.js" />
         <framework src="CoreBluetooth.framework" />
     </platform>
 </plugin>
