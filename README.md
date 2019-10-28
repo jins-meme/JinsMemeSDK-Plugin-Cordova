@@ -128,7 +128,7 @@ CALIB_BOTH_FINISHED: 3
 
 * JINS MEME SDK iOS 1.2.0
 
-### Dependent noode.js module - 依存するnodejsモジュール
+### Dependent node.js module - 依存するnodejsモジュール
 
 iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加するためにnode-xcodeを使用している。node-xcodeとその依存ライブラリは基本的にMIT LicenseとUnlicenseで使用可能である。各種詳細と依存関係は以下の通り。
 
