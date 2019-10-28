@@ -13,7 +13,7 @@ module.exports = function(context) {
 
       // Need a promise so that the install waits for us to complete our project modifications
       // before the plugin gets installed.
-      var Q = context.requireCordovaModule("q");
+      var Q = require('q');
       var deferral = new Q.defer();
 
       var platforms = context.opts.cordova.platforms;
@@ -30,8 +30,8 @@ module.exports = function(context) {
       // been upgraded to support embedded binaries.
 
       // Cordova libs to get the project path and project name so we can locate the xcode project file.
-      var cordova_util = context.requireCordovaModule("cordova-lib/src/cordova/util"),
-          ConfigParser = context.requireCordovaModule("cordova-lib").configparser,
+      var cordova_util = require('cordova-lib/src/cordova/util'),
+          ConfigParser = require('cordova-lib').configparser,
           projectRoot = cordova_util.isCordova(),
           xml = cordova_util.projectConfig(projectRoot),
           cfg = new ConfigParser(xml);
