@@ -120,7 +120,7 @@ CALIB_BOTH_FINISHED: 3
 
 ### App setting - アプリ設定
 
-* 設定 => Apps => 「該当アプリ」でBluetoothをONにすること
+* [cordova-diagnostic-plugin](https://github.com/dpa99c/cordova-diagnostic-plugin) などのユーザー許可ダイアログを使用し、permission.ACCESS_COARSE_LOCATION の権限を取得してからスキャンを開始してください。
 
 ## iOS
 
