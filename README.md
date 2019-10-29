@@ -2,7 +2,8 @@
 
 ## Change Log - 更新履歴
 
-ver. 1.3.0: Enable background buffering.
+- ver. 1.3.1: Cordova9 complient.
+- ver. 1.3.0: Enable background buffering.
 
 ## How to use - 使い方
 
@@ -13,8 +14,6 @@ ver. 1.3.0: Enable background buffering.
 ```
 ├── README.md                              # This document - 本文書
 ├── hooks
-│   ├── android_after_plugin_install.js    # インストール時フックスクリプト(Android)
-│   ├── android_before_plugin_uninstall.js # アンインストール時フックスクリプト(Android)
 │   └── ios_after_plugin_install.js        # インストール時フックスクリプト(iOS)
 ├── node_modules                           # 依存するnodejsモジュール群(iOS)
 │   └── ...
@@ -45,7 +44,7 @@ ver. 1.3.0: Enable background buffering.
 ```
 {
     code: -100,
-    message: "some message" 
+    message: "some message"
 }
 ```
 
@@ -113,7 +112,6 @@ CALIB_BOTH_FINISHED: 3
 }
 ```
 
-
 ## Android
 
 ### SDK
@@ -122,25 +120,7 @@ CALIB_BOTH_FINISHED: 3
 
 ### App setting - アプリ設定
 
-* 設定 => Apps => 「該当アプリ」でBluetoothをONにすること
-
-### Dependent libraries - 依存するライブラリ等
-
-* AndroidプラグインではAndroidManifest.xmlのtargetSdkVersionを変更するために以下のスクリプトを使用している
-
-#### android_after_plugin_install.js
-
-* cordovaのフックスクリプト
-* AndroidManifest.xmlのandroid:targetSdkVersionを22に変更
-	* BluetoothのPermission問題を解決するため
-	* 23以上だとエラーが発生
-		* ACCESS_COARSE_LOCATIONとACCESS_FINE_LOCATIONを記述していても、エラーとなってしまう
-		* gradleのバージョンを上げれば23以上でも対応可能だが、Cordovaコマンドからの更新は難しい
-	* 元々のtargetSdkVersionをhooks/original_versionファイルに保存
-
-#### android_before_plugin_uninstall.js
-
-* JINS MEMEプラグインを取り除く際に、ANdroidManifest.xmlのandroid:targetSdkVersionを元に戻す
+* [cordova-diagnostic-plugin](https://github.com/dpa99c/cordova-diagnostic-plugin) などのユーザー許可ダイアログを使用し、permission.ACCESS_COARSE_LOCATION の権限を取得してからスキャンを開始してください。
 
 ## iOS
 
@@ -148,7 +128,7 @@ CALIB_BOTH_FINISHED: 3
 
 * JINS MEME SDK iOS 1.2.0
 
-### Dependent noode.js module - 依存するnodejsモジュール
+### Dependent node.js module - 依存するnodejsモジュール
 
 iOSプラグインではXcodeのEmbedded BinariesにMEMELib.frameworkを追加するためにnode-xcodeを使用している。node-xcodeとその依存ライブラリは基本的にMIT LicenseとUnlicenseで使用可能である。各種詳細と依存関係は以下の通り。
 

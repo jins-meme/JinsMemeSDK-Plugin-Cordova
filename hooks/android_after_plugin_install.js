@@ -4,7 +4,7 @@ var manifestPath = path.resolve(__dirname + '/../../../platforms/android/Android
 var saveFilePath = path.resolve(__dirname + '/original_version');
 
 module.exports = function(context) {
-    var Q = context.requireCordovaModule("q");
+    var Q = require('q');
     var deferral = new Q.defer();
 
     console.log('Read: ' + manifestPath);
@@ -14,7 +14,7 @@ module.exports = function(context) {
             deferral.reject("JINS MEME SDK - android_after_plugin_install: " + JSON.stringify(err));
             return;
         }
- 
+
         if (!text) {
             console.log('No content: ' + manifestPath);
             deferral.reject("JINS MEME SDK - android_after_plugin_install: no manifest file");

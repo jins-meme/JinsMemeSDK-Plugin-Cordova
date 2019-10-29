@@ -5,7 +5,7 @@ var saveFilePath = path.resolve(__dirname + '/original_version');
 var sdkVersion = 23;
 
 module.exports = function(context) {
-    var Q = context.requireCordovaModule("q");
+    var Q = require('q');
     var deferral = new Q.defer();
 
     console.log('Read: ' + saveFilePath);
@@ -28,10 +28,10 @@ module.exports = function(context) {
                 deferral.resolve();
                 return;
             }
-     
+
             var regex = /android:targetSdkVersion="([0-9]+)"/;
             var replaced = text.replace(regex, 'android:targetSdkVersion="' + sdkVersion + '"');
-        
+
             fs.writeFile(manifestPath, replaced, function (err) {
                 if (err) {
                     console.log('Failed to rewrite: ' + manifestPath);
