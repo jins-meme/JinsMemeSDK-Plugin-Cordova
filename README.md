@@ -1,5 +1,12 @@
 # JINS MEME SDK Cordova Plugin
 
+## 【重要】サポート終了のお知らせ
+
+現行版 JINS MEME は2021年3月末をもちましてサポートを終了しています。Plugin につきましても2021年9月末をもって動作しなくなりますのでご注意ください。
+
+https://jins-meme.com/ja/support/user-support/jins-meme%E3%81%AE%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E7%B5%82%E4%BA%86%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/
+
+
 ## Change Log - 更新履歴
 
 - ver. 1.3.1: Cordova9 complient.
